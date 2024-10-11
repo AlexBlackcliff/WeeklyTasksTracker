@@ -1,0 +1,29 @@
+## Interface: 110002
+## Version: 1.0.0
+## Title: WeeklyTasksTracker
+## Notes: Keep track of your character's weekly tasks and events.
+## Author: DevSoto
+## SavedVariables: WeeklyTasksTrackerDatabase
+## IconTexture: Interface\Addons\WeeklyTasksTracker\Resources\ic_main_logo.tga
+
+Libraries\LibStub\LibStub.lua
+Libraries\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libraries\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libraries\LibDBIcon-1.0\lib.xml
+
+Libraries\AceAddon-3.0\AceAddon-3.0.xml
+Libraries\AceComm-3.0\AceComm-3.0.xml
+Libraries\AceConsole-3.0\AceConsole-3.0.xml
+Libraries\AceBucket-3.0\AceBucket-3.0.xml
+Libraries\AceGUI-3.0\AceGUI-3.0.xml
+
+
+Types.lua
+Constants.lua
+R.lua
+Utils.lua
+Interface.lua
+Data.lua
+
+Main.lua
+Core.lua
