@@ -209,7 +209,7 @@ function Data:GetTableData(isUnfiltered)
     end)
     local tasks = {
         {
-            name = "Tasks",
+            name = "",
             toggleHidden = false,
             columns = columns
         }

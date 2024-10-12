@@ -51,7 +51,7 @@ function UI:CreateMainWindow(name, events)
 
     UI:SetButtons(frame.titlebar, events)
 
-
+    --Frame Logo
     UI:SetIcon(frame.titlebar.border, R:GetRes("ic_logo_framed"), {
         position = "LEFT",
         offsetX = -16,
@@ -92,7 +92,7 @@ function UI:SetButtons(parent, events)
             parent.settingsButton = CreateFrame("DropdownButton", parentName.."SettingsButton", parent)
         end
         parent.settingsButton:SetSize(Constants.BUTTON_SIZE, Constants.BUTTON_SIZE)
-        parent.settingsButton:SetPoint("RIGHT", parent.closeButton, "LEFT", -8, 0)
+        parent.settingsButton:SetPoint("RIGHT", parent.closeButton, "LEFT", -Constants.BUTTON_PADDING, 0)
         parent.settingsButton:SetScript("OnEnter", function()
             parent.settingsButton.icon:SetTexture(R:GetRes("ic_settings_high"))
         end)
@@ -111,7 +111,7 @@ function UI:SetButtons(parent, events)
             parent.filterButton = CreateFrame("DropdownButton", parentName.."FilterButton", parent)
         end
         parent.filterButton:SetSize(Constants.BUTTON_SIZE, Constants.BUTTON_SIZE)
-        parent.filterButton:SetPoint("RIGHT", parent.settingsButton, "LEFT", -8, 0)
+        parent.filterButton:SetPoint("RIGHT", parent.settingsButton, "LEFT", -Constants.BUTTON_PADDING, 0)
         parent.filterButton:SetScript("OnEnter", function()
             parent.filterButton.icon:SetTexture(R:GetRes("ic_filter_high"))
         end)
@@ -130,7 +130,7 @@ function UI:SetButtons(parent, events)
             parent.characterButton = CreateFrame("DropdownButton", parentName.."FilterButton", parent)
         end
         parent.characterButton:SetSize(Constants.BUTTON_SIZE, Constants.BUTTON_SIZE)
-        parent.characterButton:SetPoint("RIGHT", parent.filterButton, "LEFT", -8, 0)
+        parent.characterButton:SetPoint("RIGHT", parent.filterButton, "LEFT", -Constants.BUTTON_PADDING, 0)
         parent.characterButton:SetScript("OnEnter", function()
             parent.characterButton.icon:SetTexture(R:GetRes("ic_character_high"))
         end)
@@ -202,7 +202,7 @@ function UI:CreateTable(config)
                 height = Constants.ROW_HEGHT
             },
             label = {
-                width = 80
+                width = Constants.LABEL_WIDTH
             },
             rows = {
                 height = Constants.ROW_HEGHT,
@@ -228,7 +228,7 @@ function UI:CreateTable(config)
     end
 
     function tableFrame:RenderTable()
-        local offsetY = 20
+        local offsetY = Constants.CELL_PADDING
         local offsetX = 0
 
         Utils:ForEach(self.rows, function (rowFrame) rowFrame:Hide() end)

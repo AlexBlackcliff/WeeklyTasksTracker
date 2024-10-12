@@ -1,5 +1,5 @@
 ## Interface: 110002
-## Version: 1.0.1
+## Version: 1.0.2
 ## Title: WeeklyTasksTracker
 ## Notes: Keep track of your character's weekly tasks and events.
 ## Author: DevSoto

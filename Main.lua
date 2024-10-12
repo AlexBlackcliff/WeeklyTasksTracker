@@ -12,6 +12,7 @@ local UI = wttAddon.UI
 local Data = wttAddon.Data
 local Utils = wttAddon.Utils
 local Constants = wttAddon.Constants
+local LibDBIcon = LibStub("LibDBIcon-1.0")
 
 function Main:ToggleWindow()
     if not self.window then return end
@@ -27,7 +28,7 @@ end
 
 function Main:Render()
     local dataTable = Data:GetTableData()
-    local tableWidth = 88+80
+    local tableWidth = 0
     local tableHeight = 0
 
     if not self.window then
@@ -41,7 +42,7 @@ function Main:Render()
                     function() return not Data.db.global.minimap.hide end,
                     function ()
                         Data.db.global.minimap.hide = not Data.db.global.minimap.hide
-                        --LibDBIcon:Refresh(addonName, Data.db.global.minimap)
+                        LibDBIcon:Refresh(addonName, Data.db.global.minimap)
                     end
                 )
              end,
@@ -106,16 +107,31 @@ function Main:Render()
     end
 
 
+    --Set Table Width
+    tableWidth = tableWidth + self.window.table.config.label.width
     Utils:ForEach(Data:GetCharacters(), function (character)
         tableWidth = tableWidth + self.window.table.config.columns.width
     end)
 
+    --Hides the title if the table is too small
+    if self.window.titlebar.border.title  then
+        if tableWidth >= 280 then
+            self.window.titlebar.border.title:SetText(addonName)
+        else
+            self.window.titlebar.border.title:SetText("")
+        end
+    end
+
+    --Set Table Height
+    tableHeight = tableHeight + Constants.CELL_PADDING
     Utils:ForEach(dataTable, function (row)
         tableHeight = tableHeight + self.window.table.config.rows.height
     end)
+    tableHeight = tableHeight + Constants.CELL_PADDING
 
+    --Set Table Data
     self.window.table:SetData(dataTable)
 
-    self.window:SetWidth(_G.math.max(tableWidth, Constants.MAX_WINDOW_WIDTH))
-    self.window:SetHeight(tableHeight + Constants.TITLEBAR_HEIGHT+28)
+    self.window:SetWidth(_G.math.max(tableWidth, Constants.MIN_WINDOW_WIDTH))
+    self.window:SetHeight(tableHeight + Constants.TITLEBAR_HEIGHT)
 end
