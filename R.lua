@@ -94,7 +94,7 @@ local Locale = {
 ---@param name string
 ---@return string
 function R:GetString(name)
-    if GetLocale() == "enUS" then
+    if GetLocale() == "esMX" then
         return Locale.esMX[name]
     end
     return Locale.enUS[name]
