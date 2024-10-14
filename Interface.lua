@@ -267,8 +267,16 @@ function UI:CreateTable(config)
                 labelFrame:SetPoint("BOTTOMLEFT", rowFrame, "BOTTOMLEFT", offsetX, 0)
                 labelFrame:SetWidth(labelWidth)
 
-                labelFrame:SetScript("OnEnter", function() UI:SetHighlight(rowFrame, true) end)
-                labelFrame:SetScript("OnLeave", function() UI:SetHighlight(rowFrame, false) end)
+                labelFrame:SetScript("OnEnter", function()
+                    if row.onEnter then
+                        row.onEnter(labelFrame)
+                    end
+                    UI:SetHighlight(rowFrame, true)
+                end)
+                labelFrame:SetScript("OnLeave", function()
+                    if row.onLeave then row.onLeave() end
+                    UI:SetHighlight(rowFrame, false)
+                end)
 
                 UI:SetText(labelFrame, row.name, {
                     alignment = "LEFT",
@@ -313,6 +321,13 @@ function UI:CreateTable(config)
                         else
                             UI:SetIcon(columnFrame, R:GetRes("ic_checkbox"), {size = 16})
                         end
+                    end,
+                    ["label"] = function ()
+                        UI:SetText(columnFrame, column.value, {
+                            alignment = "CENTER",
+                            paddingH = 8,
+                            paddingV = 2
+                        })
                     end
                 }
 

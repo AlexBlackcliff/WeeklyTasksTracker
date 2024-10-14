@@ -27,8 +27,12 @@
 
 ---@class WTT_Task
 ---@field name string
----@field taskType "single" | "multi" | "count"
----@field quests integer[]
+---@field taskType Enum.WTT_TaskType
+---@field quests WTT_Quest[]
+
+---@class WTT_Quest
+---@field id integer
+---@field name string
 
 ---@class WTT_Table
 ---@field rows WTT_TableRow[]
@@ -43,3 +47,12 @@
 ---@class WTT_TableCell
 ---@field cellType string
 ---@field value string|boolean
+
+
+---@enum Enum.WTT_TaskType
+Enum.WTT_TaskType = {
+    Single = "Single",
+    Multi = "Multi",
+    Count = "Count",
+    Label = "Label"
+}

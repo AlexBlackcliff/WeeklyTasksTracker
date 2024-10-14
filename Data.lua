@@ -8,7 +8,9 @@ local Data = {}
 wttAddon.Data = Data
 
 local Utils = wttAddon.Utils
+local R = wttAddon.R
 local AceDB = LibStub("AceDB-3.0")
+
 
 Data.databaseVersion = 1
 Data.defaultDatabase = {
@@ -45,49 +47,97 @@ Data.defaultCharacter =
 ---@type WTT_Task[]
 Data.weeklyTasks = {
     {
-        name = "Arathi",
-        taskType = "single",
-        quests = {76588}
+        name = R:GetString("arathi"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 76586, name = R:GetString("spreading_the_light") }
+        }
     },
     {
         name = "Azj-Kahet",
-        taskType = "single",
-        quests = {80670, 80671, 80672}
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 80670, name = R:GetString("eyes_of_the_weaver") },
+            { id = 80671, name = R:GetString("blade_of_the_general") },
+            { id = 80672, name = R:GetString("hand_of_the_vizier") }
+        }
     },
     {
-        name = "Delve Keys",
-        taskType = "count",
-        quests = {84736, 84737, 84738, 84739}
+        name = R:GetString("delve_keys"),
+        taskType = Enum.WTT_TaskType.Count,
+        quests = {
+            { id = 84736, name = "" },
+            { id = 84737, name = "" },
+            { id = 84738, name = "" },
+            { id = 84739, name = "" }
+        }
     },
     {
-        name = "Dungeon",
-        taskType = "single",
-        quests = {83436, 83469, 83465, 83459, 83443, 83458, 83432}
+        name = R:GetString("dungeon"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 83436, name = R:GetString("cinderbew_meadery") },
+            { id = 83469, name = R:GetString("city_of_threads") },
+            { id = 83465, name = R:GetString("ara_kara_city_of_echoes") },
+            { id = 83459, name = R:GetString("the_dawnbreaker") },
+            { id = 83443, name = R:GetString("darkflame_cleft") },
+            { id = 83458, name = R:GetString("priory_of_the_sacred_flame") },
+            { id = 83432, name = R:GetString("the_rookery") },
+            { id = 83432, name = R:GetString("the_stonevault") }
+        }
     },
     {
-        name = "Gundargaz",
-        taskType = "single",
-        quests = {83333}
+        name = R:GetString("awakening_the_machine"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 83333, name = R:GetString("gearing_up_for_trouble") }
+        }
     },
     {
-        name = "PvP",
-        taskType = "single",
-        quests = {80186, 80187, 80189, 80188, 80184, 80185}
+        name = R:GetString("pvp"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 80186, name = R:GetString("preserving_in_war") },
+            { id = 80187, name = R:GetString("preserving_in_skirmishes") },
+            { id = 80189, name = R:GetString("preserving_teamwork") },
+            { id = 80188, name = R:GetString("preserving_in_arenas") },
+            { id = 80184, name = R:GetString("preserving_in_battle") },
+            { id = 80185, name = R:GetString("preserving_solo") }
+        }
     },
     {
-        name = "Theatre",
-        taskType = "single",
-        quests = {83240}
+        name = R:GetString("world_pvp"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 81796, name = R:GetString("sparks_of_war_azj_kahet") },
+            { id = 81795, name = R:GetString("sparks_of_war_hallowfall") },
+            { id = 81793, name = R:GetString("sparks_of_war_isle_of_dorn") },
+            { id = 81794, name = R:GetString("sparks_of_war_the_ringing_deeps") }
+        }
     },
     {
-        name = "Wax Orbs",
-        taskType = "single",
-        quests = {82946}
+        name = R:GetString("theatre"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 83240, name = R:GetString("the_theater_troupe") }
+        }
     },
     {
-        name = "World Boss",
-        taskType = "single",
-        quests = {81624}
+        name = R:GetString("wax_orbs"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 82946, name = R:GetString("rollin_down_in_the_deeps") }
+        }
+    },
+    {
+        name = R:GetString("world_boss"),
+        taskType = Enum.WTT_TaskType.Single,
+        quests = {
+            { id = 81624, name = R:GetString("orta_the_broken_mountain") },
+            { id = 81630, name = R:GetString("activation_protocol") },
+            { id = 82653, name = R:GetString("agregation_of_horrors") },
+            { id = 81653, name = R:GetString("shurrai_atrocity_of_the_undersea") }
+        }
     }
 }
 
@@ -144,14 +194,13 @@ function Data:ScanCharacter()
     character.classID = classID
     character.lastUpdate = GetServerTime()
 
-    --TODO REWORK
     --Tasks
     character.completed = {}
     Utils:ForEach(Data.weeklyTasks, function(task)
         if not task.quests then return end
-        Utils:ForEach(task.quests, function(questID)
-            if C_QuestLog.IsQuestFlaggedCompleted(questID) then
-                character.completed[questID] = true
+        Utils:ForEach(task.quests, function(quest)
+            if C_QuestLog.IsQuestFlaggedCompleted(quest.id) then
+                character.completed[quest.id] = true
             end
         end)
     end)
@@ -218,11 +267,11 @@ function Data:GetTableData(isUnfiltered)
     Utils:ForEach(self.weeklyTasks, function(weeklyTask)
         local dataCells = {}
         Utils:ForEach(characters, function(character)
-            if weeklyTask.taskType == "count" then
+            if weeklyTask.taskType == Enum.WTT_TaskType.Count then
                 local max = #weeklyTask.quests
                 local count = 0
-                Utils:ForEach(weeklyTask.quests, function (questID)
-                    if character.completed[questID] then
+                Utils:ForEach(weeklyTask.quests, function (quest)
+                    if character.completed[quest.id] then
                         count = count + 1
                     end
                 end)
@@ -231,10 +280,10 @@ function Data:GetTableData(isUnfiltered)
                     value = string.format("%s / %s", count, max)
                 })
             end
-            if weeklyTask.taskType == "single" then
+            if weeklyTask.taskType == Enum.WTT_TaskType.Single then
                 local completed = false
-                Utils:ForEach(weeklyTask.quests, function(questID)
-                    if character.completed[questID] then
+                Utils:ForEach(weeklyTask.quests, function(quest)
+                    if character.completed[quest.id] then
                         completed = true
                     end
                 end)
@@ -243,11 +292,39 @@ function Data:GetTableData(isUnfiltered)
                     value = completed
                 })
             end
+            if weeklyTask.taskType == Enum.WTT_TaskType.Label then
+                _G.table.insert(dataCells, {
+                    cellType = "label",
+                    value = ""
+                })
+            end
         end)
         local dataTask = {
             name = weeklyTask.name,
             toggleHidden = true,
-            columns = dataCells
+            columns = dataCells,
+            onEnter = function (frame)
+                GameTooltip:SetOwner(frame, "ANCHOR_TOP")
+                GameTooltip:SetText(weeklyTask.name)
+                Utils:ForEach(weeklyTask.quests, function (q)
+                    if q.name and q.name == "" then return end
+                    local isActive = C_TaskQuest.IsActive(q.id) or C_QuestLog.IsOnQuest(q.id) or false
+                    local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(q.id)
+                    if isCompleted then
+                        GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(q.name))
+                        return
+                    end
+                    if isActive then
+                        GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(q.name))
+                    else
+                        GameTooltip:AddLine(LIGHTGRAY_FONT_COLOR:WrapTextInColorCode(q.name))
+                    end
+                end)
+                GameTooltip:Show()
+            end,
+            onLeave = function ()
+                GameTooltip:Hide()
+            end,
         }
         _G.table.insert(tasks, dataTask)
     end)
