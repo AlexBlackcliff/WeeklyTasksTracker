@@ -1,10 +1,10 @@
 ## Interface: 110002
-## Version: 1.0.2
+## Version: 1.0.3
 ## Title: WeeklyTasksTracker
 ## Notes: Keep track of your character's weekly tasks and events.
 ## Author: DevSoto
 ## SavedVariables: WeeklyTasksTrackerDatabase
-## IconTexture: Interface\Addons\WeeklyTasksTracker\Resources\ic_main_logo.tga
+## IconTexture: Interface\Addons\WeeklyTasksTracker\Resources\ic_main_logo
 
 ## X-Curse-Project_ID: 1119302
 
